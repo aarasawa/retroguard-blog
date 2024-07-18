@@ -2,6 +2,38 @@ import { PrismaClient, Prisma } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
+const profile = await prisma.profile.create({
+  data: {
+    bio: "Hello World",
+    user: {
+      connect: { email: "alice@prisma.io" },
+    },
+  },
+});
+
+const user = await prisma.user.create({
+  data: {
+    email: "john@prisma.io",
+    name: "John",
+    profile: {
+      create: {
+        bio: "Hello World",
+      },
+    },
+  },
+});
+
+const userWithUpdatedProfile = await prisma.user.update({
+  where: { email: "alice@prisma.io" },
+  data: {
+    profile: {
+      update: {
+        bio: "Hello Friends",
+      },
+    },
+  },
+});
+
 const userData: Prisma.UserCreateInput[] = [
   {
     name: 'Alice',

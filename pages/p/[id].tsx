@@ -1,5 +1,5 @@
 import React from "react";
-import type { GetStaticProps } from "next";
+import type { GetStaticProps, GetStaticPaths } from "next";
 import ReactMarkdown from "react-markdown";
 import Layout from "../../components/Layout";
 import Router from "next/router";
@@ -8,9 +8,10 @@ import prisma from '../../lib/prisma'
 import { useSession } from "next-auth/react";
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
+  const postId = parseInt(params?.id as string, 10);
   const post = await prisma.post.findUnique({
     where: {
-      id: String(params?.id) ,
+      id: postId,
     },
     include: {
       author: {
@@ -24,18 +25,35 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   };
 };
 
+export const getStaticPaths: GetStaticPaths = async () => {
+  const posts = await prisma.post.findMany({
+    select: {
+      id: true,
+    },
+  });
+
+  const paths = posts.map((post) => ({
+    params: { id: post.id.toString() },
+  }));
+
+  return {
+    paths,
+    fallback: 'blocking',
+  };
+};
+
 async function publishPost(id: number): Promise<void> {
   await fetch(`/api/publish/${id}`, {
     method: "PUT",
   });
-  await Router.push("/")
+  await Router.push("/");
 }
 
 async function deletePost(id: number): Promise<void> {
   await fetch(`/api/post/${id}`, {
     method: "DELETE",
   });
-  await Router.push("/")
+  await Router.push("/");
 }
 
 const Post: React.FC<PostProps> = (props) => {
