@@ -19,7 +19,7 @@ const Profile: React.FC<{ profile: ProfileProps }> = ({ profile }) => {
   const userName = profile.user ? profile.user.name : "Unknown user";
   return (
     <div onClick={() => Router.push("/profile/[id]", `/profile/${profile.id}`)}>
-      <h2>{userName}'s Profile</h2>
+      <h2>{userName}&apos;s Profile</h2>
       <p>Bio: {profile.bio ? profile.bio : "No bio available"}</p>
       <small>Email: {profile.user.email}</small>
       <style jsx>{`

@@ -6,13 +6,12 @@ import prisma from '../../../lib/prisma'
 // DELETE /api/post/:id
 export default async function handle(req: NextApiRequest, res: NextApiResponse) {
   const postId = req.query.id;
-
   const session = await getSession({ req })
 
   if (req.method === "DELETE") {
     if (session) {
       const post = await prisma.post.delete({
-        where: { id: String(postId) },
+        where: { id: Number(postId) },
       });
       res.json(post);
     } else {

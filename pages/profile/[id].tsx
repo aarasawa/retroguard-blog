@@ -13,7 +13,7 @@ const ProfilePage: React.FC<{ profile: ProfileProps }> = ({ profile }) => {
 
   return (
     <div>
-      <h1>{userName}'s Profile</h1>
+      <h1>{userName}&apos;s Profile</h1>
       <p>{profile.bio}</p>
       <small>{profile.user.email}</small>
     </div>

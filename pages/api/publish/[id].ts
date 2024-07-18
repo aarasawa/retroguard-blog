@@ -9,7 +9,7 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 
   if (session) {
     const post = await prisma.post.update({
-      where: { id: String(postId) },
+      where: { id: Number(postId) },
       data: { published: true },
     });
     res.json(post);
